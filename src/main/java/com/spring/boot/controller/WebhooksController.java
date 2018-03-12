@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,15 +38,8 @@ public class WebhooksController {
 
     @RequestMapping(value = "/webhooks", method = POST)
     public void handleWebhooks(final HttpServletRequest httpServletRequest) {
-
-        final String merchantAccountId = httpServletRequest.getParameter("merchant_account_id");
-        if (StringUtils.hasText(merchantAccountId)) {
-            LOGGER.info("merchant_account_id={}", merchantAccountId);
-        } else {
-            LOGGER.error("merchant_account_id not available");
-        }
-
-        printObject(httpServletRequest.getParameterMap());
+        LOGGER.info("bt_signature={}", extractFromServletRequest(httpServletRequest, "bt_signature"));
+        LOGGER.info("bt_payload={}", extractFromServletRequest(httpServletRequest, "bt_payload"));
     }
 
     @RequestMapping(value = "/webhooks/{merchant_account_id}", method = POST)
@@ -73,5 +67,9 @@ public class WebhooksController {
             LOGGER.error("Error={}", ex.getMessage());
         }
 
+    }
+
+    private String extractFromServletRequest(final ServletRequest servletRequest, final String requestParam) {
+        return servletRequest.getParameter(requestParam);
     }
 }
