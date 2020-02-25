@@ -9,11 +9,11 @@
     
 ## Request #2
     curl -sk -X POST http://localhost:58080/webhooks -H "Content-Type: application/json"
-     
-    merchant_account_id not available
-    serializedObject={ }
 
- ## Request #3
+## Request #3
+    curl -sk -X POST http://localhost:58080/braintree-webhooks -H "Content-Type: application/json"
+     
+ ## Request #4
      curl -sk -X POST http://localhost:58080/webhooks?merchant_account_id=abcd1234 -H "Content-Type: application/json"
      
      merchant_account_id=abcd1234
@@ -21,13 +21,13 @@
        "merchant_account_id" : [ "abcd1234" ]
      }
      
- ## Request #4
+ ## Request #5
      curl -sk -X POST http://localhost:58080/webhooks/abcd1234 -H "Content-Type: application/json"
      
      merchant_account_id=abcd1234
      serializedObject={ }
 
-## Request #5
+## Request #6
      curl -sk -X POST http://localhost:58080/object -H "Content-Type: application/json" -d "{\"greeting\": \"Hello\", \"name\": \"Cowie\"}"
       
       {

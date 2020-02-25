@@ -44,6 +44,12 @@ public class WebhooksController {
 
     @RequestMapping(value = "/webhooks", method = POST)
     public void handleWebhooks(final HttpServletRequest httpServletRequest) {
+
+        logObject(httpServletRequest);
+    }
+
+    @RequestMapping(value = "/braintree-webhooks", method = POST)
+    public void handleBraintreeWebhooks(final HttpServletRequest httpServletRequest) {
         final String btSignature = extractFromServletRequest(httpServletRequest, "bt_signature");
         final String btPayload = extractFromServletRequest(httpServletRequest, "bt_payload");
 
@@ -55,7 +61,7 @@ public class WebhooksController {
 
         LOGGER.info("merchant_account_id={}", merchantAccountId);
 
-        printObject(httpServletRequest.getParameterMap());
+        logObject(httpServletRequest.getParameterMap());
     }
 
     @RequestMapping(value = "/object", method = POST, consumes = APPLICATION_JSON_VALUE)
@@ -65,7 +71,7 @@ public class WebhooksController {
         return jsonInRequest;
     }
 
-    private static void printObject(final Object object) {
+    private static void logObject(final Object object) {
         final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(INDENT_OUTPUT);
 
@@ -83,6 +89,6 @@ public class WebhooksController {
 
     private void logBraintreeWebhookPayLoad(final String btSignature, final String btPayload) {
         final WebhookNotification webhookNotification = braintreeGateway.webhookNotification().parse(btSignature, btPayload);
-        printObject(webhookNotification);
+        logObject(webhookNotification);
     }
 }
