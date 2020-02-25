@@ -45,9 +45,7 @@ public class WebhooksController {
     @RequestMapping(value = "/webhooks", method = POST)
     public void handleWebhooks(final HttpServletRequest httpServletRequest) {
         final String btSignature = extractFromServletRequest(httpServletRequest, "bt_signature");
-        LOGGER.info("bt_signature={}", btSignature);
         final String btPayload = extractFromServletRequest(httpServletRequest, "bt_payload");
-        LOGGER.info("bt_payload={}", btPayload);
 
         logBraintreeWebhookPayLoad(btSignature, btPayload);
     }
