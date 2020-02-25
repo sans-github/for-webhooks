@@ -2,6 +2,8 @@ package com.spring.boot.controller;
 
 import com.braintreegateway.BraintreeGateway;
 import com.braintreegateway.WebhookNotification;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
@@ -73,6 +75,7 @@ public class WebhooksController {
 
     private static void logObject(final Object object) {
         final ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         objectMapper.enable(INDENT_OUTPUT);
 
         try {
