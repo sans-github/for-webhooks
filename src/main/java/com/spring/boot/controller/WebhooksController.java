@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +22,7 @@ import javax.validation.constraints.NotEmpty;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -45,9 +47,15 @@ public class WebhooksController {
 
 
     @RequestMapping(value = "/webhooks", method = POST)
-    public void handleWebhooks(final HttpServletRequest httpServletRequest) {
+    public void handleWebhooks(final HttpServletRequest request) throws  IOException {
+        if ("POST".equalsIgnoreCase(request.getMethod())) {
+            final String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+            logObject(requestBody);
+        }
+        else {
+            LOGGER.info("Received GET Request");
+        }
 
-        logObject(httpServletRequest);
     }
 
     @RequestMapping(value = "/braintree-webhooks", method = POST)
