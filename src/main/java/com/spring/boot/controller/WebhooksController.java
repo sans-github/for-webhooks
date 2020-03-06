@@ -32,9 +32,6 @@ public class WebhooksController {
     @Autowired
     public BraintreeGateway braintreeGateway;
 
-    @Autowired
-    public static Gson gson;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(WebhooksController.class);
 
 
@@ -80,6 +77,7 @@ public class WebhooksController {
     }
 
     private static void logObject(final Object object) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         LOGGER.info(gson.toJson(object));
     }
 

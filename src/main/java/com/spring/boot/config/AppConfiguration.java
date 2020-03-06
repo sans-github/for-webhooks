@@ -15,10 +15,4 @@ public class AppConfiguration {
 
         return new BraintreeGateway("sandbox",merchantId, publicKey, privateKey);
     }
-
-    @Bean
-    public Gson gson() {
-        return new GsonBuilder().setPrettyPrinting().create();
-    }
-
 }
