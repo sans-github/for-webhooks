@@ -1,6 +1,8 @@
 package com.spring.boot.config;
 
 import com.braintreegateway.BraintreeGateway;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.context.annotation.Bean;
 
 public class AppConfiguration {
@@ -13,4 +15,10 @@ public class AppConfiguration {
 
         return new BraintreeGateway("sandbox",merchantId, publicKey, privateKey);
     }
+
+    @Bean
+    public Gson gson() {
+        return new GsonBuilder().setPrettyPrinting().create();
+    }
+
 }

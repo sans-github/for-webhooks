@@ -2,15 +2,12 @@ package com.spring.boot.controller;
 
 import com.braintreegateway.BraintreeGateway;
 import com.braintreegateway.WebhookNotification;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,7 +21,6 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.stream.Collectors;
 
-import static com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -35,6 +31,9 @@ public class WebhooksController {
 
     @Autowired
     public BraintreeGateway braintreeGateway;
+
+    @Autowired
+    public static Gson gson;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebhooksController.class);
 
@@ -55,7 +54,6 @@ public class WebhooksController {
         else {
             LOGGER.info("Received GET Request");
         }
-
     }
 
     @RequestMapping(value = "/braintree-webhooks", method = POST)
@@ -82,16 +80,7 @@ public class WebhooksController {
     }
 
     private static void logObject(final Object object) {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-        objectMapper.enable(INDENT_OUTPUT);
-
-        try {
-            LOGGER.info("serializedObject={}", objectMapper.writeValueAsString(object));
-        } catch (final JsonProcessingException ex) {
-            LOGGER.error("Error={}", ex.getMessage());
-        }
-
+        LOGGER.info(gson.toJson(object));
     }
 
     private String extractFromServletRequest(final ServletRequest servletRequest, final String requestParam) {
